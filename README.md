@@ -35,9 +35,16 @@ The application is deployed on an AWS EC2 Ubuntu server and uses Amazon RDS MySQ
 
 ## AWS Architecture
 
-The application follows this deployment flow:
+The application is deployed on an AWS EC2 Ubuntu instance. Nginx receives HTTP requests and forwards them to Gunicorn, which runs the Flask application. The application connects to Amazon RDS MySQL for persistent data storage.
 
-User Browser → Nginx → Gunicorn → Flask Application → Amazon RDS MySQL
+```mermaid
+flowchart TD
+    A[User Browser] --> B[AWS EC2 Ubuntu Server]
+    B --> C[Nginx]
+    C --> D[Gunicorn]
+    D --> E[Flask Application]
+    E --> F[(Amazon RDS MySQL)]
+```
 
 ## Project Structure
 
@@ -53,12 +60,17 @@ aws-student-management-system/
 │   ├── index.html
 │   └── edit.html
 │
-├── static/
-│   └── style.css
-│
-└── terraform/
-    └── Infrastructure configuration
+└── static/
+    └── style.css
 ```
+
+## Terraform Configuration
+
+Terraform infrastructure configuration is maintained separately from this application repository.
+
+**Windows Location:**
+
+`C:\student-management-system\terraform`
 
 ## Application Features
 
@@ -81,7 +93,7 @@ Amazon RDS MySQL stores student information persistently.
 
 The application is hosted on AWS EC2 Ubuntu with Nginx as a reverse proxy and Gunicorn as the WSGI application server.
 
-Terraform is used for AWS infrastructure provisioning.
+AWS infrastructure was provisioned using Terraform. The Terraform configuration is maintained separately from this application repository.
 
 ## Learning Outcomes
 
