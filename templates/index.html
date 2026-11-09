@@ -1,53 +1,151 @@
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Student Management System</title>
+    <title>StudentHub Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-
 <body>
 
-    <h1>Student Management System</h1>
+<div class="layout">
 
-    <h2>Add New Student</h2>
+    <aside class="sidebar">
+        <div class="brand">Student<span>Hub.</span></div>
 
-    <form action="/add" method="POST">
+        <div class="nav-title">MAIN MENU</div>
+        <a href="/" class="nav-link active">▦ Dashboard</a>
+        <a href="#students" class="nav-link">♙ Students</a>
+        <a href="#add-student" class="nav-link">＋ Add Student</a>
+    </aside>
 
-        <input type="text" name="name"
-               placeholder="Student Name" required>
+    <main class="main">
 
-        <input type="email" name="email"
-               placeholder="Student Email" required>
+        <header class="topbar">
+            <div>
+                <h1>Dashboard Overview</h1>
+                <p class="subtitle">Welcome to Student Management System</p>
+            </div>
+            <div class="admin">Admin Panel</div>
+        </header>
 
-        <input type="text" name="course"
-               placeholder="Course" required>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
 
-        <button type="submit">Add Student</button>
+        <section class="stats">
 
-    </form>
+            <div class="stat-card">
+                <div class="stat-icon">👨‍🎓</div>
+                <p>Total Students</p>
+                <h2>{{ students|length }}</h2>
+            </div>
 
-    <h2>Student Records</h2>
+            <div class="stat-card">
+                <div class="stat-icon">📚</div>
+                <p>Total Courses</p>
+                <h2>{{ total_courses }}</h2>
+            </div>
 
-    <table border="1" cellpadding="10">
+        </section>
 
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Course</th>
-        </tr>
+        <section class="panel" id="add-student">
+            <div class="panel-header">
+                <div>
+                    <h2>Add New Student</h2>
+                    <p class="subtitle">Register a new student</p>
+                </div>
+            </div>
 
-        {% for student in students %}
+            <form action="/add" method="POST" class="add-form">
+                <input type="text" name="name"
+                       placeholder="Student Name" required>
 
-        <tr>
-            <td>{{ student.id }}</td>
-            <td>{{ student.name }}</td>
-            <td>{{ student.email }}</td>
-            <td>{{ student.course }}</td>
-        </tr>
+                <input type="email" name="email"
+                       placeholder="Student Email" required>
 
-        {% endfor %}
+                <input type="text" name="course"
+                       placeholder="Course" required>
 
-    </table>
+                <button class="primary" type="submit">
+                    + Add Student
+                </button>
+            </form>
+        </section>
+
+        <section class="panel" id="students">
+
+            <div class="panel-header">
+                <div>
+                    <h2>Student Records</h2>
+                    <p class="subtitle">Manage all registered students</p>
+                </div>
+
+                <input type="search" id="searchInput"
+                       placeholder="Search students...">
+            </div>
+
+            <div class="table-wrap">
+                <table id="studentTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Course</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for student in students %}
+                        <tr>
+                            <td>#{{ student.id }}</td>
+                            <td>{{ student.name }}</td>
+                            <td>{{ student.email }}</td>
+                            <td>{{ student.course }}</td>
+
+                            <td>
+                                <div class="actions">
+                                    <a class="edit-btn"
+                                       href="{{ url_for('edit_student', id=student.id) }}">
+                                        Edit
+                                    </a>
+
+                                    <form action="{{ url_for('delete_student', id=student.id) }}"
+                                          method="POST"
+                                          onsubmit="return confirm('Delete this student?');">
+                                        <button class="delete-btn" type="submit">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+
+    </main>
+</div>
+
+<script>
+document.getElementById("searchInput").addEventListener("input", function() {
+    const query = this.value.toLowerCase();
+
+    document.querySelectorAll("#studentTable tbody tr").forEach(row => {
+        row.style.display = row.innerText.toLowerCase().includes(query)
+            ? ""
+            : "none";
+    });
+});
+</script>
 
 </body>
 </html>
+

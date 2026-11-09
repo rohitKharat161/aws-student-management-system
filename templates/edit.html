@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Student | StudentHub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .edit-container {
+            max-width: 650px;
+            margin: 45px auto;
+        }
+
+        .edit-card {
+            background: white;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 5px 25px rgba(0,0,0,.05);
+        }
+
+        .edit-card h2 {
+            margin-bottom: 10px;
+        }
+
+        .edit-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .edit-form label {
+            font-weight: 600;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .edit-form input {
+            width: 100%;
+            padding: 14px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            background: #e2e8f0;
+            color: #334155;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        @media(max-width: 600px) {
+            .edit-card {
+                padding: 22px;
+            }
+
+            .edit-container {
+                margin: 20px auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <div class="brand">Student<span>Hub.</span></div>
+
+        <div class="nav-title">MAIN MENU</div>
+
+        <a href="/" class="nav-link">▦ Dashboard</a>
+        <a href="/#students" class="nav-link">♙ Students</a>
+        <a href="/#add-student" class="nav-link">＋ Add Student</a>
+    </aside>
+
+    <main class="main">
+
+        <header class="topbar">
+            <div>
+                <h1>Edit Student</h1>
+                <p class="subtitle">Update student information</p>
+            </div>
+
+            <div class="admin">Admin Panel</div>
+        </header>
+
+        <div class="edit-container">
+
+            <div class="edit-card">
+
+                <h2>✏️ Update Student Details</h2>
+
+                <p class="subtitle">
+                    Editing Student ID #{{ student.id }}
+                </p>
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endwith %}
+
+                <form method="POST" class="edit-form">
+
+                    <label>Student Name</label>
+                    <input type="text"
+                           name="name"
+                           value="{{ student.name }}"
+                           required>
+
+                    <label>Email Address</label>
+                    <input type="email"
+                           name="email"
+                           value="{{ student.email }}"
+                           required>
+
+                    <label>Course</label>
+                    <input type="text"
+                           name="course"
+                           value="{{ student.course }}"
+                           required>
+
+                    <div class="form-actions">
+
+                        <button type="submit" class="primary">
+                            Save Changes
+                        </button>
+
+                        <a href="/" class="back-btn">
+                            Cancel
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>
+
